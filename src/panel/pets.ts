@@ -130,6 +130,7 @@ function calculateSpriteWidth(size: PetSize): number{
 
 abstract class BasePetType implements IPetType {
     label: string = "base";
+    static count: number = 0;
     sequence: ISequenceTree = { startingState: States.sitIdle, sequenceStates: []};
     currentState: IState;
     currentStateEnum: States;
@@ -158,6 +159,9 @@ abstract class BasePetType implements IPetType {
 
         this._name = name;
         this._speed = speed;
+
+        // Increment the static count of the Pet class that the constructor belongs to
+        (this.constructor as any).count += 1;
     }
 
     initSprite(petSize: PetSize, left: number, bottom: number) {
@@ -720,45 +724,45 @@ function getPetName(collection: Map<number, string>, label: string, count: numbe
     }
 }
 
-export function createPet(petType: string, el: HTMLImageElement, collision: HTMLDivElement, size: PetSize, left: number, bottom: number, petRoot: string, floor: number, name: string | undefined, count: number) : IPetType {
+export function createPet(petType: string, el: HTMLImageElement, collision: HTMLDivElement, size: PetSize, left: number, bottom: number, petRoot: string, floor: number, name: string | undefined) : IPetType {
     if (petType === "totoro"){
         if (name === undefined)
-            {name = getPetName(TOTORO_NAMES, PetType.totoro, count);}
+            {name = getPetName(TOTORO_NAMES, PetType.totoro, Totoro.count + 1);}
         return new Totoro(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.normal);
     }
     if (petType === "cat"){
         if (name === undefined)
-            {name = getPetName(CAT_NAMES, PetType.cat, count);}
+            {name = getPetName(CAT_NAMES, PetType.cat, Cat.count + Dog.count + 1);} // Cat and dog share the same name list
         return new Cat(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.normal);
     }
     else if (petType === "dog") {
         if (name === undefined)
-            {name = getPetName(DOG_NAMES, PetType.dog, count);}
+            {name = getPetName(DOG_NAMES, PetType.dog, Dog.count + Cat.count + 1);} // Cat and dog share the same name list
         return new Dog(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.normal);
     }
     else if (petType === "snake") {
         if (name === undefined)
-            {name = getPetName(SNAKE_NAMES, PetType.snake, count);}
+            {name = getPetName(SNAKE_NAMES, PetType.snake, Snake.count + 1);}
         return new Snake(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.verySlow);
     }
     else if (petType === "clippy") {
         if (name === undefined)
-            {name = getPetName(CLIPPY_NAMES, PetType.clippy, count);}
+            {name = getPetName(CLIPPY_NAMES, PetType.clippy, Clippy.count + 1);}
         return new Clippy(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.slow);
     }
     else if (petType === "crab") {
         if (name === undefined)
-            {name = getPetName(CRAB_NAMES, PetType.crab, count);}
+            {name = getPetName(CRAB_NAMES, PetType.crab, Crab.count + 1);}
         return new Crab(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.slow);
     }
     else if (petType === "rubber-duck") {
         if (name === undefined)
-            {name = getPetName(DUCK_NAMES, PetType.rubberduck, count);}
+            {name = getPetName(DUCK_NAMES, PetType.rubberduck, RubberDuck.count + 1);}
         return new RubberDuck(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.fast);
     }
     else if (petType === "zappy") {
         if (name === undefined)
-            {name = getPetName(ZAPPY_NAMES, PetType.zappy, count);}
+            {name = getPetName(ZAPPY_NAMES, PetType.zappy, Zappy.count + 1);}
         return new Zappy(el, collision, size, left, bottom, petRoot, floor, name, PetSpeed.veryFast);
     }
     throw new InvalidPetException();

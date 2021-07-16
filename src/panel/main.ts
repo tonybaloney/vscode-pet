@@ -97,7 +97,7 @@ function addPetToPanel(petType: PetType, basePetUri: string, petColor: PetColor,
 
   const root = basePetUri + '/' + petType + '/' + petColor;
   console.log("Creating new pet : ", petType, root);
-  var newPet = createPet(petType, petSpriteElement, collisionElement, petSize, left, bottom, root, floor, name, petCounter);
+  var newPet = createPet(petType, petSpriteElement, collisionElement, petSize, left, bottom, root, floor, name);
   petCounter ++ ;
   startAnimations(collisionElement, newPet);
   return new PetElement(petSpriteElement, collisionElement, newPet, petColor, petType);
